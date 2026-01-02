@@ -1,87 +1,117 @@
 -- ==============================
--- 🔐 CAPI HUB – KEY SYSTEM (MOBILE SAFE)
--- HWID
+-- 🔐 CAPI HUB LOADER (HARDENED)
+-- MOBILE SAFE / NO HWID
 -- ==============================
 
-local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
-
+local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- ====== PAID KEYS ======
--- true = gültig
-local Keys = {
+-- ===== Anti-Tamper (basic, mobile safe)
+pcall(function()
+    if not game:IsLoaded() then
+        game.Loaded:Wait()
+    end
+end)
+
+if typeof(loadstring) ~= "function" then
+    return
+end
+
+-- ====== KEYS (SESSION BASED)
+local _K = {
     ["CAPI-A1B3"] = true,
     ["CAPI-C3D4"] = true,
     ["CAPI-E6B5"] = true,
     ["CAPI-F9K2"] = true,
     ["CAPI-M8Q7"] = true,
     ["CAPI-Z4R6"] = true,
-    ["CAPI-P2L9"] = true,
-    ["CAPI-W7X5"] = true,
-    ["CAPI-H3N8"] = true,
-    ["CAPI-Y6D1"] = true,
 }
 
--- ====== GUI ======
-local gui = Instance.new("ScreenGui", CoreGui)
-gui.Name = "CAPI_KEY_GUI"
-gui.ResetOnSpawn = false
+-- ====== GUI
+local g = Instance.new("ScreenGui", CoreGui)
+g.Name = "CAPI_LDR"
 
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 340, 0, 200)
-frame.Position = UDim2.new(0.5, -170, 0.5, -100)
-frame.BackgroundColor3 = Color3.fromRGB(15, 5, 5)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
+local f = Instance.new("Frame", g)
+f.Size = UDim2.new(0, 300, 0, 170)
+f.Position = UDim2.new(0.5, -150, 0.5, -85)
+f.BackgroundColor3 = Color3.fromRGB(15, 5, 5)
+f.BorderSizePixel = 0
+f.Active = true
+f.Draggable = true
+Instance.new("UICorner", f).CornerRadius = UDim.new(0, 14)
 
-local stroke = Instance.new("UIStroke", frame)
-stroke.Color = Color3.fromRGB(255, 0, 0)
-stroke.Thickness = 2
+local t = Instance.new("TextLabel", f)
+t.Size = UDim2.new(1, 0, 0, 36)
+t.BackgroundTransparency = 1
+t.Text = "Capi Hub – Loader"
+t.Font = Enum.Font.GothamBold
+t.TextSize = 18
+t.TextColor3 = Color3.fromRGB(255, 80, 80)
 
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundTransparency = 1
-title.Text = "CAPI HUB – KEY SYSTEM"
-title.Font = Enum.Font.GothamBold
-title.TextSize = 18
-title.TextColor3 = Color3.fromRGB(255, 80, 80)
-
-local box = Instance.new("TextBox", frame)
-box.Size = UDim2.new(0.9, 0, 0, 40)
-box.Position = UDim2.new(0.05, 0, 0.35, 0)
-box.PlaceholderText = "Enter your key"
+local box = Instance.new("TextBox", f)
+box.Size = UDim2.new(0.9, 0, 0, 38)
+box.Position = UDim2.new(0.05, 0, 0.38, 0)
+box.PlaceholderText = "Enter Key"
 box.Text = ""
 box.Font = Enum.Font.Gotham
 box.TextSize = 16
 box.BackgroundColor3 = Color3.fromRGB(30, 10, 10)
-box.TextColor3 = Color3.fromRGB(255, 255, 255)
+box.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", box)
 
-local btn = Instance.new("TextButton", frame)
-btn.Size = UDim2.new(0.9, 0, 0, 40)
-btn.Position = UDim2.new(0.05, 0, 0.65, 0)
-btn.Text = "UNLOCK"
-btn.Font = Enum.Font.GothamBold
-btn.TextSize = 18
-btn.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
-btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-Instance.new("UICorner", btn)
+local b = Instance.new("TextButton", f)
+b.Size = UDim2.new(0.9, 0, 0, 38)
+b.Position = UDim2.new(0.05, 0, 0.68, 0)
+b.Text = "UNLOCK"
+b.Font = Enum.Font.GothamBold
+b.TextSize = 17
+b.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+b.TextColor3 = Color3.new(1,1,1)
+Instance.new("UICorner", b)
 
--- ====== LOGIC (KEY ONLY) ======
-btn.MouseButton1Click:Connect(function()
-    local key = box.Text
-    if key == "" then return end
+-- ====== OBFUSCATED URL (split)
+local _a = "https://raw.githubusercontent.com/"
+local _b = "capi231/"
+local _c = "Capi-hub/"
+local _d = "main/"
+local _e = "main.lua"
 
-    if not Keys[key] then
-        btn.Text = "INVALID KEY"
+local function _get()
+    return _a .. _b .. _c .. _d .. _e
+end
+
+-- ====== FAKE FLOW (delay)
+local function _delay()
+    local x = tick() % 1
+    task.wait(0.2 + x)
+end
+
+-- ====== UNLOCK LOGIC
+b.MouseButton1Click:Connect(function()
+    local k = box.Text
+    if k == "" then return end
+
+    _delay()
+
+    if not _K[k] then
+        b.Text = "INVALID KEY"
         return
     end
 
-    gui:Destroy()
-    loadstring(game:HttpGet(
-        "https://raw.githubusercontent.com/capi231/Capi-hub/main/main.lua"
-    ))()
+    -- Session Auth
+    getgenv().Authorized = true
+
+    g:Destroy()
+
+    local src
+    local ok = pcall(function()
+        src = game:HttpGet(_get())
+    end)
+
+    if not ok or not src then
+        return
+    end
+
+    loadstring(src)()
 end)

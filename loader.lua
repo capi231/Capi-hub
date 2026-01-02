@@ -9,7 +9,7 @@ local HWID = RbxAnalyticsService:GetClientId()
 
 -- ====== PAID KEYS ======
 local Keys = {
-    ["CAPI-A1B2"] = false,
+    ["CAPI-A1B3"] = false,
     ["CAPI-C3D4"] = false,
     ["CAPI-E5F6"] = false,
 }

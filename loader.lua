@@ -7,30 +7,31 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- ===== Anti-Tamper (basic, mobile safe)
+-- ===== Anti-Tamper (mobile safe)
 pcall(function()
-    if not game:IsLoaded() then
-        game.Loaded:Wait()
-    end
+	if not game:IsLoaded() then
+		game.Loaded:Wait()
+	end
 end)
 
 if typeof(loadstring) ~= "function" then
-    return
+	return
 end
 
 -- ====== KEYS (SESSION BASED)
 local _K = {
-    ["CAPI-A1B3"] = true,
-    ["CAPI-C3D4"] = true,
-    ["CAPI-E6B5"] = true,
-    ["CAPI-F9K2"] = true,
-    ["CAPI-M8Q7"] = true,
-    ["CAPI-Z4R6"] = true,
+	["CAPI-A1B3"] = true,
+	["CAPI-C3D4"] = true,
+	["CAPI-E6B5"] = true,
+	["CAPI-F9K2"] = true,
+	["CAPI-M8Q7"] = true,
+	["CAPI-Z4R6"] = true,
 }
 
 -- ====== GUI
 local g = Instance.new("ScreenGui", CoreGui)
 g.Name = "CAPI_LDR"
+g.ResetOnSpawn = false
 
 local f = Instance.new("Frame", g)
 f.Size = UDim2.new(0, 300, 0, 170)
@@ -70,48 +71,47 @@ b.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
 b.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", b)
 
--- ====== OBFUSCATED URL (split)
+-- ====== OBFUSCATED URL (NEW MAIN)
 local _a = "https://raw.githubusercontent.com/"
 local _b = "capi231/"
-local _c = "Capi-hub/"
+local _c = "kedkekels-nnclsnwlskbd/"
 local _d = "main/"
 local _e = "main.lua"
 
 local function _get()
-    return _a .. _b .. _c .. _d .. _e
+	return _a .. _b .. _c .. _d .. _e
 end
 
--- ====== FAKE FLOW (delay)
+-- ====== FAKE FLOW
 local function _delay()
-    local x = tick() % 1
-    task.wait(0.2 + x)
+	task.wait(0.2 + (tick() % 0.3))
 end
 
--- ====== UNLOCK LOGIC
+-- ====== UNLOCK
 b.MouseButton1Click:Connect(function()
-    local k = box.Text
-    if k == "" then return end
+	local k = box.Text
+	if k == "" then return end
 
-    _delay()
+	_delay()
 
-    if not _K[k] then
-        b.Text = "INVALID KEY"
-        return
-    end
+	if not _K[k] then
+		b.Text = "INVALID KEY"
+		return
+	end
 
-    -- Session Auth
-    getgenv().Authorized = true
+	-- Session Flag
+	getgenv().Authorized = true
 
-    g:Destroy()
+	g:Destroy()
 
-    local src
-    local ok = pcall(function()
-        src = game:HttpGet(_get())
-    end)
+	local src
+	local ok = pcall(function()
+		src = game:HttpGet(_get())
+	end)
 
-    if not ok or not src then
-        return
-    end
+	if not ok or not src then
+		return
+	end
 
-    loadstring(src)()
+	loadstring(src)()
 end)

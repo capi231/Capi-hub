@@ -11,7 +11,7 @@ local HWID = RbxAnalyticsService:GetClientId()
 local Keys = {
     ["CAPI-A1B3"] = false,
     ["CAPI-C3D4"] = false,
-    ["CAPI-E5F6"] = false,
+    ["CAPI-E6B5"] = false,
 }
 
 -- ====== GUI ======

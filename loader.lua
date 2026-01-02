@@ -1,17 +1,26 @@
--- CAPI HUB KEY LOADER (NO _G.Key)
+-- ==============================
+-- 🔐 CAPI HUB – KEY SYSTEM (MOBILE SAFE)
+-- HWID
+-- ==============================
 
 local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
-local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
 
 local player = Players.LocalPlayer
-local HWID = RbxAnalyticsService:GetClientId()
 
 -- ====== PAID KEYS ======
+-- true = gültig
 local Keys = {
-    ["CAPI-A1B3"] = false,
-    ["CAPI-C3D4"] = false,
-    ["CAPI-E6B5"] = false,
+    ["CAPI-A1B3"] = true,
+    ["CAPI-C3D4"] = true,
+    ["CAPI-E6B5"] = true,
+    ["CAPI-F9K2"] = true,
+    ["CAPI-M8Q7"] = true,
+    ["CAPI-Z4R6"] = true,
+    ["CAPI-P2L9"] = true,
+    ["CAPI-W7X5"] = true,
+    ["CAPI-H3N8"] = true,
+    ["CAPI-Y6D1"] = true,
 }
 
 -- ====== GUI ======
@@ -26,8 +35,8 @@ frame.BackgroundColor3 = Color3.fromRGB(15, 5, 5)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
-
 Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 14)
+
 local stroke = Instance.new("UIStroke", frame)
 stroke.Color = Color3.fromRGB(255, 0, 0)
 stroke.Thickness = 2
@@ -61,22 +70,18 @@ btn.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
 btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 Instance.new("UICorner", btn)
 
+-- ====== LOGIC (KEY ONLY) ======
 btn.MouseButton1Click:Connect(function()
     local key = box.Text
     if key == "" then return end
 
-    if Keys[key] == nil then
+    if not Keys[key] then
         btn.Text = "INVALID KEY"
         return
     end
 
-    if Keys[key] == false then
-        Keys[key] = HWID
-    elseif Keys[key] ~= HWID then
-        btn.Text = "KEY USED"
-        return
-    end
-
     gui:Destroy()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/capi231/Capi-hub/main/main.lua"))()
+    loadstring(game:HttpGet(
+        "https://raw.githubusercontent.com/capi231/Capi-hub/main/main.lua"
+    ))()
 end)

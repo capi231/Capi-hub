@@ -18,8 +18,10 @@ if typeof(loadstring) ~= "function" then
 	return
 end
 
--- ====== KEYS (SESSION BASED)
-local _K = {
+-- ==============================
+-- 🔑 LIFETIME KEYS (NICHT GELÖSCHT)
+-- ==============================
+local LifetimeKeys = {
 	["CAPI-A1B3"] = true,
 	["CAPI-C3D4"] = true,
 	["CAPI-E6B5"] = true,
@@ -28,7 +30,58 @@ local _K = {
 	["CAPI-Z4R6"] = true,
 }
 
--- ====== GUI
+-- ==============================
+-- ⏳ TIME BASED KEYS
+-- ==============================
+local TimeKeys = {
+
+	-- 🕒 1 DAY
+	["CAPI-DAY-9F3K"] = 86400,
+	["CAPI-DAY-X7A2"] = 86400,
+	["CAPI-DAY-QP91"] = 86400,
+
+	-- 🕒 1 WEEK
+	["CAPI-WEEK-A8D2"] = 604800,
+	["CAPI-WEEK-ZM44"] = 604800,
+	["CAPI-WEEK-KP77"] = 604800,
+
+	-- 🕒 1 MONTH
+	["CAPI-MONTH-33XF"] = 2592000,
+	["CAPI-MONTH-9QWE"] = 2592000,
+	["CAPI-MONTH-LS88"] = 2592000,
+}
+
+-- ==============================
+-- 🔐 KEY CHECK FUNCTION
+-- ==============================
+local function isValidKey(key)
+
+	-- Lifetime Keys
+	if LifetimeKeys[key] then
+		return true
+	end
+
+	-- Time Keys
+	if TimeKeys[key] then
+		local stampName = "CAPI_TIME_" .. key
+		local startTime = getgenv()[stampName]
+
+		if not startTime then
+			getgenv()[stampName] = os.time()
+			return true
+		end
+
+		if os.time() - startTime <= TimeKeys[key] then
+			return true
+		end
+	end
+
+	return false
+end
+
+-- ==============================
+-- 🖥️ GUI
+-- ==============================
 local g = Instance.new("ScreenGui", CoreGui)
 g.Name = "CAPI_LDR"
 g.ResetOnSpawn = false
@@ -71,7 +124,9 @@ b.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
 b.TextColor3 = Color3.new(1,1,1)
 Instance.new("UICorner", b)
 
--- ====== OBFUSCATED URL (NEW MAIN)
+-- ==============================
+-- 🌐 OBFUSCATED MAIN URL
+-- ==============================
 local _a = "https://raw.githubusercontent.com/"
 local _b = "capi231/"
 local _c = "kedkekels-nnclsnwlskbd/"
@@ -82,26 +137,28 @@ local function _get()
 	return _a .. _b .. _c .. _d .. _e
 end
 
--- ====== FAKE FLOW
+-- ==============================
+-- ⏳ FAKE DELAY
+-- ==============================
 local function _delay()
 	task.wait(0.2 + (tick() % 0.3))
 end
 
--- ====== UNLOCK
+-- ==============================
+-- 🔓 UNLOCK
+-- ==============================
 b.MouseButton1Click:Connect(function()
 	local k = box.Text
 	if k == "" then return end
 
 	_delay()
 
-	if not _K[k] then
-		b.Text = "INVALID KEY"
+	if not isValidKey(k) then
+		b.Text = "INVALID / EXPIRED"
 		return
 	end
 
-	-- Session Flag
 	getgenv().Authorized = true
-
 	g:Destroy()
 
 	local src
@@ -109,9 +166,7 @@ b.MouseButton1Click:Connect(function()
 		src = game:HttpGet(_get())
 	end)
 
-	if not ok or not src then
-		return
+	if ok and src then
+		loadstring(src)()
 	end
-
-	loadstring(src)()
 end)
